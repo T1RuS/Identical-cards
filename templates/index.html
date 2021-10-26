@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- CSS only -->
+    <link href="cover.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/maim.css') }}">
+    <title>Sapper</title>
+</head>
+<body class="d-flex h-100 text-center text-white bg-dark">
+
+<div class="cover-container d-flex w-50 h-50 p-3 mx-auto flex-column">
+    <header class="mb-auto">
+        <div>
+            <h1 class="px-3 name">Sapper</h1>
+        </div>
+    </header>
+
+    <main class="px-3 center">
+        <form class="column" method="post">
+            <div>
+                <div class="form_radio_btn">
+                    <input id="radio-1" type="radio" name="game" value="2" checked>
+                    <label for="radio-1">2 x 2</label>
+                </div>
+
+                <div class="form_radio_btn margin">
+                    <input id="radio-2" type="radio" name="game" value="3">
+                    <label for="radio-2">3 x 3</label>
+                </div>
+
+                <div class="form_radio_btn margin">
+                    <input id="radio-3" type="radio" name="game" value="4">
+                    <label for="radio-3">4 x 4</label>
+                    </div>
+            </div>
+            <input class="buttons_reg px-3" name="login" id="login" type="text" placeholder="Введите ваше имя">
+            <input class="buttons_reg" type="submit" value="Играть">
+        </form>
+        {% block game %}
+        {% endblock %}
+    </main>
+
+    <footer class="mt-auto text-white-50">
+    </footer>
+</div>
+
+
+</body>
+</html>
