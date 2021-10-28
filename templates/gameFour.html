@@ -1,30 +1,52 @@
 {% extends 'index.html' %}
 
 {% block game %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script>
+        function changeColor(btn, id){
+            let game_id;
+            game_id = {{ game_id.id }};
+        $.ajax({
+        url: "/update",
+        type: "POST", // тетод отправки
+        data : {'game_id': game_id, 'button_id': id}, //данные которые хочешь передать
+        dataType: "json", // формат принятия данных
+        success: function (data){  // что после получения значения нужно сделать
+            console.log(data)
+            if (data['data'] === 1) {
+                btn.style.backgroundColor = "#A64343FF";
+            }
+            else {
+                 btn.style.backgroundColor = "#558F3FFF";
+             }
+            }
+        });
+    }
+    </script>
     <div class="game">
         <div>
-            <input class="gamebox" placeholder="{{ num[0] }}">
-            <input class="gamebox margin" placeholder="{{ num[1] }}">
-            <input class="gamebox margin" placeholder="{{ num[2] }}">
-            <input class="gamebox margin" placeholder="{{ num[3] }}">
+            <button onclick="changeColor(this, 0)" class="gamebox"></button>
+            <button onclick="changeColor(this, 1)" class="gamebox margin"></button>
+            <button onclick="changeColor(this, 2)" class="gamebox margin"></button>
+            <button onclick="changeColor(this, 3)" class="gamebox margin"></button>
         </div>
         <div class="top">
-            <input class="gamebox" placeholder="{{ num[4] }}">
-            <input class="gamebox margin" placeholder="{{ num[5] }}">
-            <input class="gamebox margin" placeholder="{{ num[6] }}">
-            <input class="gamebox margin" placeholder="{{ num[7] }}">
+            <button onclick="changeColor(this, 4)" class="gamebox"></button>
+            <button onclick="changeColor(this, 5)" class="gamebox margin"></button>
+            <button onclick="changeColor(this, 6)" class="gamebox margin"></button>
+            <button onclick="changeColor(this, 7)" class="gamebox margin"></button>
         </div>
         <div class="top">
-            <input class="gamebox" placeholder="{{ num[8] }}">
-            <input class="gamebox margin" placeholder="{{ num[9] }}">
-            <input class="gamebox margin" placeholder="{{ num[10] }}">
-            <input class="gamebox margin" placeholder="{{ num[11] }}">
+            <button onclick="changeColor(this, 8)" class="gamebox"></button>
+            <button onclick="changeColor(this, 9)" class="gamebox margin"></button>
+            <button onclick="changeColor(this, 10)" class="gamebox margin"></button>
+            <button onclick="changeColor(this, 11)" class="gamebox margin"></button>
         </div>
         <div class="top">
-            <input class="gamebox" placeholder="{{ num[12] }}">
-            <input class="gamebox margin" placeholder="{{ num[13] }}">
-            <input class="gamebox margin" placeholder="{{ num[14] }}">
-            <input class="gamebox margin" placeholder="{{ num[15] }}">
+            <button onclick="changeColor(this, 12)" class="gamebox"></button>
+            <button onclick="changeColor(this, 13)" class="gamebox margin"></button>
+            <button onclick="changeColor(this, 14)" class="gamebox margin"></button>
+            <button onclick="changeColor(this, 15)" class="gamebox margin"></button>
         </div>
     </div>
 {% endblock %}

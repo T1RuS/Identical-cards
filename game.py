@@ -15,7 +15,10 @@ def GameTwo():
     for i in range(2):
         p = num[i]
         numgo[p - 1] = 1
-    return numgo
+    a = ''
+    for i in numgo:
+        a += str(i)
+    return a
 
 
 def GameThree():
@@ -40,12 +43,15 @@ def GameThree():
     for i in range(3):
         p = num[i]
         numgo[p - 1] = 1
-    print(11111111111111)
-    return numgo
+
+    a = ''
+    for i in numgo:
+        a += str(i)
+    return a
+
 
 
 def GameFour():
-    print(11111111111111)
     num = []
     num.append(random.randint(1, 16))
     p = 0
@@ -67,5 +73,7 @@ def GameFour():
     for i in range(5):
         p = num[i]
         numgo[p - 1] = 1
-    print(numgo)
-    return numgo
+    a = ''
+    for i in numgo:
+        a += str(i)
+    return a

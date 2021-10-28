@@ -1,14 +1,36 @@
 {% extends 'index.html' %}
 
 {% block game %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script>
+        function changeColor(btn, id){
+            let game_id;
+            game_id = {{ game_id.id }};
+        $.ajax({
+        url: "/update",
+        type: "POST", // тетод отправки
+        data : {'game_id': game_id, 'button_id': id}, //данные которые хочешь передать
+        dataType: "json", // формат принятия данных
+        success: function (data){  // что после получения значения нужно сделать
+            console.log(data)
+            if (data['data'] === 1) {
+                btn.style.backgroundColor = "#A64343FF";
+            }
+            else {
+                 btn.style.backgroundColor = "#558F3FFF";
+             }
+            }
+        });
+    }
+    </script>
     <div class="game">
         <div>
-            <input class="gamebox" placeholder="{{ num[0] }}">
-            <input class="gamebox margin" placeholder="{{ num[1] }}">
+            <button onclick="changeColor(this, 0)" class="gamebox"></button>
+            <button onclick="changeColor(this, 1)" class="gamebox margin"></button>
         </div>
         <div class="top">
-            <input class="gamebox" placeholder="{{ num[2] }}">
-            <input class="gamebox margin" placeholder="{{ num[3] }}">
+            <button onclick="changeColor(this, 2)" class="gamebox"></button>
+            <button onclick="changeColor(this, 3)" class="gamebox margin"></button>
         </div>
     </div>
 {% endblock %}
