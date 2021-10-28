@@ -1,11 +1,8 @@
 from flask import Flask, flash, jsonify
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.engine import cursor
-from sqlalchemy.ext.asyncio import session
-
 from game import GameTwo, GameThree, GameFour
-import numpy as np
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///Main.db'
@@ -74,7 +71,6 @@ def updateNum():
         return jsonify({'data': int(1)})
     else:
         return jsonify({'data': int(0)})
-
 
 
 if __name__ == '__main__':
