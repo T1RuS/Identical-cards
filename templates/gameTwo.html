@@ -1,28 +1,39 @@
 {% extends 'index.html' %}
 
 {% block game %}
+    {% block status %}
+    {% endblock %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <script>
-        function changeColor(btn, id){
+        function changeColor(btn, id) {
             let game_id;
             game_id = {{ game_id.id }};
-        $.ajax({
-        url: "/update",
-        type: "POST", // тетод отправки
-        data : {'game_id': game_id, 'button_id': id}, //данные которые хочешь передать
-        dataType: "json", // формат принятия данных
-        success: function (data){  // что после получения значения нужно сделать
-            console.log(data)
-            if (data['data'] === 1) {
-                btn.style.backgroundColor = "#A64343FF";
-            }
-            else {
-                 btn.style.backgroundColor = "#558F3FFF";
-             }
-            }
-        });
-    }
+            $.ajax({
+                url: "/update",
+                type: "POST",
+                data: {'game_id': game_id, 'button_id': id},
+                dataType: "json",
+                success: function (data) {
+                    console.log(data)
+                    if (data['data'] === 1) {
+                        btn.style.backgroundColor = "#A64343FF";
+                        document.getElementById("p1").classList.toggle("status_hw");
+                        document.getElementById("p1").innerHTML = "Вы проиграли";
+                    }
+                    else {
+                        btn.style.backgroundColor = "#558F3FFF";
+                        if (data['status'] === 1) {
+                            document.getElementById("p1").classList.toggle("status_hw");
+                            document.getElementById("p1").innerHTML = "Вы выиграли";
+                        }
+
+                    }
+                }
+            });
+        }
     </script>
+
+
     <div class="game">
         <div>
             <button onclick="changeColor(this, 0)" class="gamebox"></button>
@@ -32,5 +43,7 @@
             <button onclick="changeColor(this, 2)" class="gamebox"></button>
             <button onclick="changeColor(this, 3)" class="gamebox margin"></button>
         </div>
+        <div id="p1" class="status"></div>
     </div>
+
 {% endblock %}
