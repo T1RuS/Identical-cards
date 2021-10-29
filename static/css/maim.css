@@ -120,3 +120,37 @@
     top: 400px;
     margin-left: 10%;
 }
+
+.USD {
+    background: url("../img/USD.jpg");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+
+}
+
+.diamond {
+    background: url("../img/diamond.jpg");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+
+}
+
+.horseshoe {
+    background: url("../img/horseshoe.jpg");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+.cherry {
+    background: url("../img/cherry.jpg");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+.money {
+    position: absolute;
+    left: 50px;
+    top: 50px;
+    color: #ccb74a;
+    font-size: 40px;
+}

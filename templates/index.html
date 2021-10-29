@@ -36,11 +36,12 @@
                     <label for="radio-3">4 x 4</label>
                     </div>
             </div>
-            <input class="buttons_reg px-3" name="login" id="login" type="text" placeholder="Введите ваше имя">
+            <input class="buttons_reg px-3" name="bet" id="bet" type="number" placeholder="Введите вашу ставку">
             <input class="buttons_reg" type="submit" value="Играть">
         </form>
         {% block game %}
         {% endblock %}
+        <div class="money" id="money"> Ваш выигрыш: {{ cash }} $</div>
     </main>
 
     <footer class="mt-auto text-white-50">

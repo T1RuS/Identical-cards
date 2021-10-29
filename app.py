@@ -1,8 +1,7 @@
 from flask import Flask, flash, jsonify
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
-from game import GameTwo, GameThree, GameFour
-
+from game import GameTwo, GameThree, GameFour, UnicNum
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///Main.db'
@@ -12,95 +11,135 @@ db = SQLAlchemy(app)
 
 class Register(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    login = db.Column(db.String(300), nullable=False)
+    bet = db.Column(db.String(300), nullable=False)
     game = db.Column(db.String(300), nullable=False)
     status = db.Column(db.String(300), nullable=True)
+    cards_open = db.Column(db.String(300), nullable=True)
+    cash = db.Column(db.String(300), nullable=True)
 
 
 
 @app.route('/', methods=['POST', 'GET'])
 def main():
+    cash = Register.query.get(1)
     if request.method == "POST":
-        if request.form['game'] == '2' and len(request.form['login']) > 5:
-            login = request.form['login']
+        if request.form['game'] == '2':
+            bet = request.form['bet']
             game_num = GameTwo()
-            new_game = Register(login=login, game=game_num, status=0)
+            print('создание игры')
+            new_game = Register(bet=bet, game=game_num, status=0, cards_open='')
             try:
                 db.session.add(new_game)
                 db.session.commit()
                 game_id = db.session.query(Register).order_by(Register.id)[-1]
             except:
                 return "Ошибка сохранения"
-            return render_template('gameTwo.html', game_id=game_id)  # добавить айди нового пользователя
-        elif request.form['game'] == '3' and len(request.form['login']) > 5:
-            login = request.form['login']
+            return render_template('gameTwo.html', game_id=game_id, cash=cash.cash)  # добавить айди нового пользователя
+        elif request.form['game'] == '3':
+            bet = request.form['bet']
             game_num = GameThree()
-            new_game = Register(login=login, game=game_num, status=0)
+            new_game = Register(bet=bet, game=game_num, status=0, cards_open='')
             try:
                 db.session.add(new_game)
                 db.session.commit()
                 game_id = db.session.query(Register).order_by(Register.id)[-1]
             except:
                 return "Ошибка сохранения"
-            return render_template('gameThree.html', game_id=game_id)
-        elif request.form['game'] == '4' and len(request.form['login']) > 5:
-            login = request.form['login']
+            return render_template('gameThree.html', game_id=game_id, cash=cash.cash)
+        elif request.form['game'] == '4':
+            bet = request.form['bet']
             game_num = GameFour()
-            new_game = Register(login=login, game=game_num, status=0)
+            new_game = Register(bet=bet, game=game_num, status=0, cards_open='')
             try:
                 db.session.add(new_game)
                 db.session.commit()
                 game_id = db.session.query(Register).order_by(Register.id)[-1]
             except:
                 return "Ошибка сохранения"
-            return render_template('gameFour.html', game_id=game_id)
+            return render_template('gameFour.html', game_id=game_id, cash=cash.cash)
         else:
             pass
-    return render_template('index.html')
+
+    return render_template('index.html', cash=cash.cash)
 
 
 @app.route('/lose', methods=['GET'])
 def lose():
-     return render_template('Lose.html', game_id=1)
-
-
-status_num = 0
+    return render_template('Lose.html', game_id=1)
 
 
 @app.route('/update', methods=['POST', 'GET'])
 def updateNum():
-    global status_num
-    print(request.form['game_id'])  # принять значения данных ajax
     session_game = Register.query.get(request.form['game_id'])
+    cash = Register.query.get(1)
     i = session_game.game
-    print(i)
-    print(i[int(request.form['button_id'])])
-    print(int(request.form['button_id']))
-    game_id = request.form['game_id']
-    print(session_game.status, 'статус')
-    if i[int(request.form['button_id'])] == '1' and session_game.status == '0':
-        session_game.status = 'lose'
-        db.session.commit()
-        return jsonify({'data': int(1)})
-    elif session_game.status == '0':
-        status_num += 1
-        if len(i) == 4 and session_game.status == '0':
-            status_num = 0
-            session_game.status = 'win'
+    if session_game.status == '0':
+        if len(i) == 4:
+            session_game.cards_open += i[int(request.form['button_id'])]
             db.session.commit()
-            return jsonify({'data': int(0), 'status': int(1)})
-        elif len(i) == 9 and status_num == 3 and session_game.status == '0':
-            status_num = 0
-            session_game.status = 'win'
+            print(session_game.cards_open, 'открытые карты')
+            if len(session_game.cards_open) == 2 and session_game.cards_open[0] == session_game.cards_open[
+                1] and session_game.status == '0':
+                session_game.status = 'win'
+                db.session.commit()
+                pic_num = i[int(request.form['button_id'])]
+                money = int(cash.cash)
+                money += int(session_game.bet) * 2
+                cash.cash = money
+                db.session.commit()
+                return jsonify({'data': int(pic_num), 'game': int(1), 'cash': cash.cash})
+            elif len(session_game.cards_open) == 2 and session_game.cards_open[0] != session_game.cards_open[
+                1] and session_game.status == '0':
+                session_game.status = 'lose'
+                db.session.commit()
+                pic_num = i[int(request.form['button_id'])]
+                return jsonify({'data': int(pic_num), 'game': int(0), 'cash': cash.cash})
+            pic_num = i[int(request.form['button_id'])]
+            return jsonify({'data': int(pic_num), 'game': int(3), 'cash': cash.cash})
+        elif len(i) == 9:
+            session_game.cards_open += i[int(request.form['button_id'])]
             db.session.commit()
-            return jsonify({'data': int(0), 'status': int(1)})
-        elif len(i) == 16 and status_num == 5 and session_game.status == '0':
-            status_num = 0
-            session_game.status = 'win'
+            print(len(session_game.cards_open), 'открытые карты')
+            if len(session_game.cards_open) == 4 and UnicNum(session_game.cards_open, 3) == '1' \
+                    and session_game.status == '0':
+                session_game.status = 'win'
+                db.session.commit()
+                pic_num = i[int(request.form['button_id'])]
+                money = int(cash.cash)
+                money += int(session_game.bet) * 3
+                cash.cash = money
+                db.session.commit()
+                return jsonify({'data': int(pic_num), 'game': int(1), 'cash': cash.cash})
+            elif len(session_game.cards_open) == 4 and UnicNum(session_game.cards_open, 3) == '0' \
+                    and session_game.status == '0':
+                session_game.status = 'lose'
+                db.session.commit()
+                pic_num = i[int(request.form['button_id'])]
+                return jsonify({'data': int(pic_num), 'game': int(0), 'cash': cash.cash})
+            pic_num = i[int(request.form['button_id'])]
+            return jsonify({'data': int(pic_num), 'game': int(3), 'cash': cash.cash})
+        elif len(i) == 16:
+            session_game.cards_open += i[int(request.form['button_id'])]
             db.session.commit()
-            return jsonify({'data': int(0), 'status': int(1)})
-        print(status_num)
-        return jsonify({'data': int(0), 'status': int(0)})
+            print(len(session_game.cards_open), 'открытые карты')
+            if len(session_game.cards_open) == 5 and UnicNum(session_game.cards_open, 4) == '1' \
+                    and session_game.status == '0':
+                session_game.status = 'win'
+                db.session.commit()
+                pic_num = i[int(request.form['button_id'])]
+                money = int(cash.cash)
+                money += int(session_game.bet) * 4
+                cash.cash = money
+                db.session.commit()
+                return jsonify({'data': int(pic_num), 'game': int(1), 'cash': cash.cash})
+            elif len(session_game.cards_open) == 5 and UnicNum(session_game.cards_open, 4) == '0' \
+                    and session_game.status == '0':
+                session_game.status = 'lose'
+                db.session.commit()
+                pic_num = i[int(request.form['button_id'])]
+                return jsonify({'data': int(pic_num), 'game': int(0), 'cash': cash.cash})
+            pic_num = i[int(request.form['button_id'])]
+            return jsonify({'data': int(pic_num), 'game': int(3), 'cash': cash.cash})
 
 
 if __name__ == '__main__':
