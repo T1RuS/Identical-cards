@@ -122,7 +122,7 @@ def updateNum():
             session_game.cards_open += i[int(request.form['button_id'])]
             db.session.commit()
             print(len(session_game.cards_open), 'открытые карты')
-            if len(session_game.cards_open) == 5 and UnicNum(session_game.cards_open, 4) == '1' \
+            if len(session_game.cards_open) == 6 and UnicNum(session_game.cards_open, 4) == '1' \
                     and session_game.status == '0':
                 session_game.status = 'win'
                 db.session.commit()
@@ -132,7 +132,7 @@ def updateNum():
                 cash.cash = money
                 db.session.commit()
                 return jsonify({'data': int(pic_num), 'game': int(1), 'cash': cash.cash})
-            elif len(session_game.cards_open) == 5 and UnicNum(session_game.cards_open, 4) == '0' \
+            elif len(session_game.cards_open) == 6 and UnicNum(session_game.cards_open, 4) == '0' \
                     and session_game.status == '0':
                 session_game.status = 'lose'
                 db.session.commit()
