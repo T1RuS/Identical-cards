@@ -18,7 +18,6 @@ class Register(db.Model):
     cash = db.Column(db.String(300), nullable=True)
 
 
-
 @app.route('/', methods=['POST', 'GET'])
 def main():
     cash = Register.query.get(1)
@@ -87,15 +86,15 @@ def updateNum():
                 money += int(session_game.bet) * 2
                 cash.cash = money
                 db.session.commit()
-                return jsonify({'data': int(pic_num), 'game': int(1), 'cash': cash.cash})
+                return jsonify({'data': pic_num, 'game': 1, 'cash': cash.cash})
             elif len(session_game.cards_open) == 2 and session_game.cards_open[0] != session_game.cards_open[
                 1] and session_game.status == '0':
                 session_game.status = 'lose'
                 db.session.commit()
                 pic_num = i[int(request.form['button_id'])]
-                return jsonify({'data': int(pic_num), 'game': int(0), 'cash': cash.cash})
+                return jsonify({'data': pic_num, 'game': 0, 'cash': cash.cash})
             pic_num = i[int(request.form['button_id'])]
-            return jsonify({'data': int(pic_num), 'game': int(3), 'cash': cash.cash})
+            return jsonify({'data': pic_num, 'game': 3, 'cash': cash.cash})
         elif len(i) == 9:
             session_game.cards_open += i[int(request.form['button_id'])]
             db.session.commit()
@@ -109,21 +108,22 @@ def updateNum():
                 money += int(session_game.bet) * 3
                 cash.cash = money
                 db.session.commit()
-                return jsonify({'data': int(pic_num), 'game': int(1), 'cash': cash.cash})
+                return jsonify({'data': pic_num, 'game': 1, 'cash': cash.cash})
             elif len(session_game.cards_open) == 4 and UnicNum(session_game.cards_open, 3) == '0' \
                     and session_game.status == '0':
                 session_game.status = 'lose'
                 db.session.commit()
                 pic_num = i[int(request.form['button_id'])]
-                return jsonify({'data': int(pic_num), 'game': int(0), 'cash': cash.cash})
+                return jsonify({'data': pic_num, 'game': 0, 'cash': cash.cash})
             pic_num = i[int(request.form['button_id'])]
-            return jsonify({'data': int(pic_num), 'game': int(3), 'cash': cash.cash})
+            return jsonify({'data': pic_num, 'game': 3, 'cash': cash.cash})
         elif len(i) == 16:
             session_game.cards_open += i[int(request.form['button_id'])]
             db.session.commit()
             print(len(session_game.cards_open), 'открытые карты')
             if len(session_game.cards_open) == 6 and UnicNum(session_game.cards_open, 4) == '1' \
                     and session_game.status == '0':
+                print(1)
                 session_game.status = 'win'
                 db.session.commit()
                 pic_num = i[int(request.form['button_id'])]
@@ -131,15 +131,16 @@ def updateNum():
                 money += int(session_game.bet) * 4
                 cash.cash = money
                 db.session.commit()
-                return jsonify({'data': int(pic_num), 'game': int(1), 'cash': cash.cash})
+                return jsonify({'data': pic_num, 'game': 1, 'cash': cash.cash})
             elif len(session_game.cards_open) == 6 and UnicNum(session_game.cards_open, 4) == '0' \
                     and session_game.status == '0':
+                print(2)
                 session_game.status = 'lose'
                 db.session.commit()
                 pic_num = i[int(request.form['button_id'])]
-                return jsonify({'data': int(pic_num), 'game': int(0), 'cash': cash.cash})
+                return jsonify({'data': pic_num, 'game': 0, 'cash': cash.cash})
             pic_num = i[int(request.form['button_id'])]
-            return jsonify({'data': int(pic_num), 'game': int(3), 'cash': cash.cash})
+            return jsonify({'data': pic_num, 'game': 3, 'cash': cash.cash})
 
 
 if __name__ == '__main__':

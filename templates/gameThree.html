@@ -13,14 +13,14 @@
                 dataType: "json",
                 success: function (data) {
                     console.log(data)
-                    if (data['data'] === 1) {
+                    if (data['data'] === "1") {
                         btn.classList.add("USD");
                     }
-                    else if (data['data'] === 2) {
+                    else if (data['data'] === "2") {
                         btn.classList.add("diamond");
 
                     }
-                    else if (data['data'] === 3) {
+                    else if (data['data'] === "3") {
                         btn.classList.add("horseshoe")
                     }
                     if (data['game'] === 1) {
